@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Curs extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'fecha_inicio_curs',
+        'fecha_fin_curs',
+    ];
 }

@@ -6,20 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('trimestres', function (Blueprint $table) {
             $table->id();
+            $table->timestamp('fecha_inicio_trimestre');
+            $table->timestamp('fecha_fin_trimestre');
+            $table->foreignId('curs_id')->constrained();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('trimestres');

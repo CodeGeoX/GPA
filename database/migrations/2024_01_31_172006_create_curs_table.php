@@ -6,22 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('curs', function (Blueprint $table) {
             $table->id();
+            $table->timestamp('fecha_inicio_curs');
+            $table->timestamp('fecha_fin_curs');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('curs');
     }
 };
+

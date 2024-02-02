@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Trimestre extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'fecha_inicio_trimestre',
+        'fecha_fin_trimestre',
+    ];
+
+    public function trimestre()
+    {
+        return $this->belongsTo(Trimestre::class);
+    }
+
 }
