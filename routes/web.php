@@ -2,21 +2,17 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\CursController;
+use App\Http\Controllers\FestiuController;
+use App\Http\Controllers\TrimestreController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('generarcalendario');
 });
+
+Route::resource('cursos', CursController::class);
+Route::resource('festius', FestiuController::class);
+Route::resource('trimestres', TrimestreController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -26,8 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/curs', [CursController::class, 'store'])->name('curs.store');
 });
 
 require __DIR__.'/auth.php';
 
-//test

@@ -13,4 +13,8 @@ class Curs extends Model
         'fecha_inicio_curs',
         'fecha_fin_curs',
     ];
+
+    public function trimestres(){
+        return $this->hasMany(Trimestre::class);
+    }
 }
