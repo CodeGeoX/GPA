@@ -10,8 +10,9 @@ class Festiu extends Model
     use HasFactory;
 
     protected $fillable = [
-        'data_inicio_festiu',
-        'data_final_festiu',
+        'fecha_inicio_festiu',
+        'fecha_fin_festiu',
+        'curs_id'
     ];
 
     public function curs()

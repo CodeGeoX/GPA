@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('festius', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('data_inicio_festiu');
-            $table->timestamp('data_final_festiu');
+            $table->timestamp('fecha_inicio_festiu');
+            $table->timestamp('fecha_fin_festiu');
             $table->foreignId('curs_id')->constrained(); // Updated to reference 'curs' table
             $table->timestamps();
         });

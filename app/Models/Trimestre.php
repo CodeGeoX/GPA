@@ -12,6 +12,7 @@ class Trimestre extends Model
     protected $fillable = [
         'fecha_inicio_trimestre',
         'fecha_fin_trimestre',
+        'curs_id'
     ];
 
     public function curs()

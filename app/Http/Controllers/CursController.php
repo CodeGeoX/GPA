@@ -41,7 +41,7 @@ class CursController extends Controller
         $this->createTrimestres($curs, $request);
 
         // Create Festiu forms associated with the new Curs
-        $this->createFestiuForms($curs, $request);
+        $this->createFestiu($curs, $request);
 
         // Redirect or return a response as needed
         return redirect()->route('cursos.index')->with('success', 'Curso creado satisfactoriamente con sus trimestres y festius.');
@@ -88,27 +88,19 @@ class CursController extends Controller
     /**
      * Create Festiu forms associated with the given Curs.
      */
-    private function createFestiuForms(Curs $curs, Request $request)
+    private function createFestiu(Curs $curs, Request $request)
     {
-        // Get the number of Festiu forms to create (you can customize this logic)
-        $numberOfFestius = $request->input('number_of_festius', 0);
+        // Validate Festiu data
+        $request->validate([
+            'fecha_inicio_festiu' => 'required|date',
+            'fecha_fin_festiu' => 'required|date|after_or_equal:fecha_inicio_festiu',
+        ]);
 
-        // Loop to create Festiu forms
-        for ($i = 0; $i < $numberOfFestius; $i++) {
-            // Validate Festiu form data
-            $request->validate([
-                "festius.$i.fecha_inicio_festiu" => 'required|date',
-                "festius.$i.fecha_fin_festiu" => "required|date|after_or_equal:festius.$i.fecha_inicio_festiu",
-                // Add other validation rules for Festiu if needed
-            ]);
-
-            // Create and save Festiu associated with the Curs
-            $curs->festius()->create([
-                'fecha_inicio_festiu' => $request->input("festius.$i.fecha_inicio_festiu"),
-                'fecha_fin_festiu' => $request->input("festius.$i.fecha_fin_festiu"),
-                // Add other fields as needed
-            ]);
-        }
+        // Create and save Festiu associated with the Curs
+        $curs->festius()->create([
+            'fecha_inicio_festiu' => $request->input('fecha_inicio_festiu'),
+            'fecha_fin_festiu' => $request->input('fecha_fin_festiu'),
+        ]);
     }
 
     /**
