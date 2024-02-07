@@ -32,6 +32,12 @@ class CursController extends Controller
         $request->validate([
             'fecha_inicio_curs' => 'required|date',
             'fecha_fin_curs' => 'required|date|after_or_equal:fecha_inicio_curs',
+            'fecha_inicio_trimestre1' => 'required|date',
+            'fecha_fin_trimestre1' => 'required|date|after_or_equal:fecha_inicio_trimestre1',
+            'fecha_inicio_trimestre2' => 'required|date',
+            'fecha_fin_trimestre2' => 'required|date|after_or_equal:fecha_inicio_trimestre2',
+            'fecha_inicio_trimestre3' => 'required|date',
+            'fecha_fin_trimestre3' => 'required|date|after_or_equal:fecha_inicio_trimestre3',
         ]);
 
         // Create a new Curs instance
@@ -39,6 +45,25 @@ class CursController extends Controller
             'fecha_inicio_curs' => $request->input('fecha_inicio_curs'),
             'fecha_fin_curs' => $request->input('fecha_fin_curs'),
         ]);
+
+        // Create and save trimestres associated with the new Curs
+        $curs->trimestres()->create([
+            'fecha_inicio_trimestre' => $request->input('fecha_inicio_trimestre1'),
+            'fecha_fin_trimestre' => $request->input('fecha_fin_trimestre1'),
+        ]);
+
+        $curs->trimestres()->create([
+            'fecha_inicio_trimestre' => $request->input('fecha_inicio_trimestre2'),
+            'fecha_fin_trimestre' => $request->input('fecha_fin_trimestre2'),
+        ]);
+
+        $curs->trimestres()->create([
+            'fecha_inicio_trimestre' => $request->input('fecha_inicio_trimestre3'),
+            'fecha_fin_trimestre' => $request->input('fecha_fin_trimestre3'),
+        ]);
+
+        // Redirect or return a response as needed
+        return redirect()->route('cursos.index')->with('success', 'Curso creado satisfactoriamente con sus trimestres.');
     }
 
     /**

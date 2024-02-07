@@ -22,18 +22,34 @@
             </div>
 
             <h3>Trimestres</h3>
-            @for ($i = 1; $i <= 3; $i++)
+            
                 <div class="form-group">
-                    <label for="fecha_inicio_trimestre{{ $i }}">Fecha de Inicio Trimestre {{ $i }}:</label>
-                    <input type="date" name="fecha_inicio_trimestre[{{ $i }}]" class="form-control" required>
+                    <label for="fecha_inicio_trimestre1">Fecha de Inicio Trimestre 1:</label>
+                    <input type="date" name="fecha_inicio_trimestre1" class="form-control" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="fecha_fin_trimestre{{ $i }}">Fecha de Fin Trimestre {{ $i }}:</label>
-                    <input type="date" name="fecha_fin_trimestre[{{ $i }}]" class="form-control" required>
+                    <label for="fecha_fin_trimestre1">Fecha de Fin Trimestre 1:</label>
+                    <input type="date" name="fecha_fin_trimestre1" class="form-control" required>
                 </div>
-            @endfor
+                <div class="form-group">
+                    <label for="fecha_inicio_trimestre2">Fecha de Inicio Trimestre 2:</label>
+                    <input type="date" name="fecha_inicio_trimestre2" class="form-control" required>
+                </div>
 
+                <div class="form-group">
+                    <label for="fecha_fin_trimestre2">Fecha de Fin Trimestre 2:</label>
+                    <input type="date" name="fecha_fin_trimestre2" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="fecha_inicio_trimestre3">Fecha de Inicio Trimestre 3:</label>
+                    <input type="date" name="fecha_inicio_trimestre3" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_fin_trimestre3">Fecha de Fin Trimestre 3:</label>
+                    <input type="date" name="fecha_fin_trimestre3" class="form-control" required>
+                </div>
             <button type="submit" class="btn btn-primary">Create Curs with Trimestres</button>
         </form>
     </div>
