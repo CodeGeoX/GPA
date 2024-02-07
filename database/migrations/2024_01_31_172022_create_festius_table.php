@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->timestamp('data_inicio_festiu');
             $table->timestamp('data_final_festiu');
-            $table->foreignId('trimestre_id')->constrained();
+            $table->foreignId('curs_id')->constrained(); // Updated to reference 'curs' table
             $table->timestamps();
         });
     }
@@ -22,4 +22,5 @@ return new class extends Migration
         Schema::dropIfExists('festius');
     }
 };
+
 

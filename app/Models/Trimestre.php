@@ -14,9 +14,9 @@ class Trimestre extends Model
         'fecha_fin_trimestre',
     ];
 
-    public function trimestre()
+    public function curs()
     {
-        return $this->belongsTo(Trimestre::class);
+        return $this->belongsTo(Curs::class);
     }
-
 }
+

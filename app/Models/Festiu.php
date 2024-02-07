@@ -18,10 +18,4 @@ class Festiu extends Model
     {
         return $this->belongsTo(Curs::class);
     }
-
-    public function festius()
-    {
-        return $this->hasMany(Festiu::class);
-    }
-
 }
