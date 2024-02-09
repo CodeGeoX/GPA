@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Curs;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Http\Response;
+
+
 
 class CursController extends Controller
 {
@@ -103,6 +107,61 @@ class CursController extends Controller
         ]);
     }
 
+    public function showDays(Curs $curs)
+{
+    // Get the start and end dates of the Curs
+    $startDate = Carbon::parse($curs->fecha_inicio_curs);
+    $endDate = Carbon::parse($curs->fecha_fin_curs);
+
+    // Generate an array of dates and corresponding days of the week
+    $days = [];
+    while ($startDate->lte($endDate)) {
+        $days[] = [
+            'date' => $startDate->format('d.M'),
+            'day' => $startDate->shortDayName,
+        ];
+        $startDate->addDay();
+    }
+
+    // Pass the data to the view
+    return view('show', compact('curs', 'days'));
+}
+
+public function export(Curs $curs)
+    {
+        // Retrieve the days or calendar data for the given Curs
+        $days = $this->getCalendarData($curs);
+
+        // Convert the data to JSON
+        $json = json_encode($days, JSON_PRETTY_PRINT);
+
+        // Create a download response
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => 'attachment; filename="calendar_export.json"',
+        ];
+
+        return new Response($json, 200, $headers);
+    }
+
+    private function getCalendarData(Curs $curs)
+{
+    $calendarData = [];
+
+    // Retrieve Trimestres and associated data
+    $trimestres = $curs->trimestres;
+
+    foreach ($trimestres as $trimestre) {
+        // Include Trimestre data
+        $calendarData[] = [
+            'type' => 'trimestre',
+            'start_date' => $trimestre->fecha_inicio_trimestre,
+            'end_date' => $trimestre->fecha_fin_trimestre,
+        ];
+    }
+
+    return $calendarData;
+}
     /**
      * Display the specified resource.
      */

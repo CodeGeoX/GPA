@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CursController;
 use App\Http\Controllers\FestiuController;
 use App\Http\Controllers\TrimestreController;
+use App\Http\Controllers\CalendarController;
+
 
 Route::get('/', function () {
     return view('generarcalendario');
@@ -24,6 +26,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/curs', [CursController::class, 'store'])->name('curs.store');
 });
+
+Route::get('/curs/{curs}/show-days', [CursController::class, 'showDays'])->name('curs.showDays');
+
+Route::get('/curs/export', [CursController::class, 'export'])->name('curs.export');
+
 
 require __DIR__.'/auth.php';
 
