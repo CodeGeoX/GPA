@@ -109,28 +109,22 @@ class CursController extends Controller
 
     public function showDays(Curs $curs)
     {
-        // Get the start and end dates of the Curs
         $startDate = Carbon::parse($curs->fecha_inicio_curs);
         $endDate = Carbon::parse($curs->fecha_fin_curs);
     
-        // Retrieve trimesters for the Curs
-        $trimesters = $curs->trimestres()->get();
+        $trimesters = $curs->trimestres()->get()->sortBy('fecha_inicio_trimestre');
     
-        // Generate an array of dates, corresponding days of the week, and trimester info
+        // Genera una matriz de fechas con información adicional sobre los trimestres
         $days = [];
         while ($startDate->lte($endDate)) {
-            $isTrimesterStartOrEnd = false;
-            $trimesterLabel = '';
+            $trimesterInfo = null;
     
-            // Check if this date is the start or end of any trimester
-            foreach ($trimesters as $trimester) {
-                if ($startDate->toDateString() == $trimester->fecha_inicio_trimestre->toDateString()) {
-                    $isTrimesterStartOrEnd = true;
-                    $trimesterLabel = 'Start of Trimester';
+            foreach ($trimesters as $index => $trimester) {
+                if ($startDate->isSameDay($trimester->fecha_inicio_trimestre)) {
+                    $trimesterInfo = 'Inicio del Trimestre ' . ($index + 1);
                     break;
-                } elseif ($startDate->toDateString() == $trimester->fecha_fin_trimestre->toDateString()) {
-                    $isTrimesterStartOrEnd = true;
-                    $trimesterLabel = 'End of Trimester';
+                } elseif ($startDate->isSameDay($trimester->fecha_fin_trimestre)) {
+                    $trimesterInfo = 'Fin del Trimestre ' . ($index + 1);
                     break;
                 }
             }
@@ -138,16 +132,46 @@ class CursController extends Controller
             $days[] = [
                 'date' => $startDate->format('d.M.Y'),
                 'day' => $startDate->shortDayName,
-                'isTrimesterStartOrEnd' => $isTrimesterStartOrEnd,
-                'trimesterLabel' => $trimesterLabel,
+                'trimesterInfo' => $trimesterInfo,
             ];
+    
             $startDate->addDay();
         }
     
-        // Pass the data to the view
         return view('show', compact('curs', 'days'));
     }
+    
 
+    public function exportToJson(Curs $curs)
+{
+    $startDate = Carbon::parse($curs->fecha_inicio_curs);
+    $endDate = Carbon::parse($curs->fecha_fin_curs);
+    $days = [];
+
+    // Generar todos los días del curso
+    while ($startDate->lte($endDate)) {
+        $days[] = [
+            'fecha' => $startDate->format('d M'), 
+            'dia' => $startDate->translatedFormat('l'), 
+        ];
+        $startDate->addDay();
+    }
+
+    $calendarData = [
+        'trimestres' => $this->getCalendarData($curs),
+        'dias' => $days,
+    ];
+
+    $filename = "calendario_curso_" . $curs->id . ".json";
+    $headers = [
+        'Content-Type' => 'application/json',
+        'Content-Disposition' => 'attachment; filename=' . $filename,
+    ];
+
+    return response()->json($calendarData, 200, $headers);
+}
+
+    
 
     private function getCalendarData(Curs $curs)
 {

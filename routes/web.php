@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/curs/{curs}/show-days', [CursController::class, 'showDays'])->name('curs.showDays');
+Route::get('/cursos/{curs}/export', [CursController::class, 'exportToJson'])->name('cursos.export');
 
 
 
