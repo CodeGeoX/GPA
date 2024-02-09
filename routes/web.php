@@ -29,7 +29,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/curs/{curs}/show-days', [CursController::class, 'showDays'])->name('curs.showDays');
 
-Route::get('/curs/export', [CursController::class, 'export'])->name('curs.export');
 
 
 require __DIR__.'/auth.php';

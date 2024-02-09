@@ -108,41 +108,46 @@ class CursController extends Controller
     }
 
     public function showDays(Curs $curs)
-{
-    // Get the start and end dates of the Curs
-    $startDate = Carbon::parse($curs->fecha_inicio_curs);
-    $endDate = Carbon::parse($curs->fecha_fin_curs);
-
-    // Generate an array of dates and corresponding days of the week
-    $days = [];
-    while ($startDate->lte($endDate)) {
-        $days[] = [
-            'date' => $startDate->format('d.M'),
-            'day' => $startDate->shortDayName,
-        ];
-        $startDate->addDay();
-    }
-
-    // Pass the data to the view
-    return view('show', compact('curs', 'days'));
-}
-
-public function export(Curs $curs)
     {
-        // Retrieve the days or calendar data for the given Curs
-        $days = $this->getCalendarData($curs);
-
-        // Convert the data to JSON
-        $json = json_encode($days, JSON_PRETTY_PRINT);
-
-        // Create a download response
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="calendar_export.json"',
-        ];
-
-        return new Response($json, 200, $headers);
+        // Get the start and end dates of the Curs
+        $startDate = Carbon::parse($curs->fecha_inicio_curs);
+        $endDate = Carbon::parse($curs->fecha_fin_curs);
+    
+        // Retrieve trimesters for the Curs
+        $trimesters = $curs->trimestres()->get();
+    
+        // Generate an array of dates, corresponding days of the week, and trimester info
+        $days = [];
+        while ($startDate->lte($endDate)) {
+            $isTrimesterStartOrEnd = false;
+            $trimesterLabel = '';
+    
+            // Check if this date is the start or end of any trimester
+            foreach ($trimesters as $trimester) {
+                if ($startDate->toDateString() == $trimester->fecha_inicio_trimestre->toDateString()) {
+                    $isTrimesterStartOrEnd = true;
+                    $trimesterLabel = 'Start of Trimester';
+                    break;
+                } elseif ($startDate->toDateString() == $trimester->fecha_fin_trimestre->toDateString()) {
+                    $isTrimesterStartOrEnd = true;
+                    $trimesterLabel = 'End of Trimester';
+                    break;
+                }
+            }
+    
+            $days[] = [
+                'date' => $startDate->format('d.M.Y'),
+                'day' => $startDate->shortDayName,
+                'isTrimesterStartOrEnd' => $isTrimesterStartOrEnd,
+                'trimesterLabel' => $trimesterLabel,
+            ];
+            $startDate->addDay();
+        }
+    
+        // Pass the data to the view
+        return view('show', compact('curs', 'days'));
     }
+
 
     private function getCalendarData(Curs $curs)
 {
