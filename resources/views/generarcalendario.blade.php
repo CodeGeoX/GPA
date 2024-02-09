@@ -45,16 +45,6 @@
             <label for="fecha_fin_trimestre3">End Date of Trimester 3:</label>
             <input type="date" name="fecha_fin_trimestre3" class="form-control" required>
         </div>
-        
-        <h3>Festiu</h3>
-        <div class="form-group">
-            <label for="fecha_inicio_festiu">Start Date of Festiu:</label>
-            <input type="date" name="fecha_inicio_festiu" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="fecha_fin_festiu">End Date of Festiu:</label>
-            <input type="date" name="fecha_fin_festiu" class="form-control" required>
-        </div>
 
         <button type="submit" class="btn btn-primary">Create Course with Trimesters</button>
     </form>

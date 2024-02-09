@@ -44,12 +44,33 @@ class CursController extends Controller
         // Create and save trimestres associated with the new Curs
         $this->createTrimestres($curs, $request);
 
-        // Create Festiu forms associated with the new Curs
-        $this->createFestiu($curs, $request);
-
         // Redirect or return a response as needed
-        return redirect()->route('cursos.index')->with('success', 'Curso creado satisfactoriamente con sus trimestres y festius.');
+        return redirect()->route('curs.createFestiu', $curs->id); // Redirect to the festiu creation form
+}
+
+// Method to show Festiu creation form
+public function createFestiuForm($cursId)
+{
+    return view('festiu', compact('cursId')); // Pass the curs ID to the view
+}
+
+// Method to store Festiu
+public function storeFestiu(Request $request, $cursId)
+{
+    $request->validate([
+        'fecha_inicio_festiu' => 'required|date',
+        'fecha_fin_festiu' => 'required|date|after_or_equal:fecha_inicio_festiu',
+    ]);
+    
+    $curs = Curs::findOrFail($cursId);
+    $curs->festius()->create($request->only(['fecha_inicio_festiu', 'fecha_fin_festiu']));
+    
+    if ($request->has('add_another')) {
+        return redirect()->route('curs.createFestiu', $cursId); // Stay on the page for more festius
+    } else {
+        return redirect()->route('cursos.index')->with('success', 'Curso y Festius creados satisfactoriamente.');
     }
+}
 
     /**
      * Validate the incoming Curs data.
