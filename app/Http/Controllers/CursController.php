@@ -71,7 +71,7 @@ public function storeFestiu(Request $request, $cursId)
         return redirect()->route('cursos.index')->with('success', 'Curso y Festius creados satisfactoriamente.');
     }
 }
-
+//test
     /**
      * Validate the incoming Curs data.
      */
