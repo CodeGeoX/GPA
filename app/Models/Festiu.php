@@ -15,6 +15,11 @@ class Festiu extends Model
         'curs_id'
     ];
 
+    protected $dates = [
+        'fecha_inicio_festiu',
+        'fecha_fin_festiu',
+    ];
+
     public function curs()
     {
         return $this->belongsTo(Curs::class);

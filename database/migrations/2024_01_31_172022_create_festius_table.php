@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->timestamp('fecha_inicio_festiu');
             $table->timestamp('fecha_fin_festiu');
-            $table->foreignId('curs_id')->constrained(); // Updated to reference 'curs' table
+            $table->foreignId('curs_id')->constrained(); 
             $table->timestamps();
         });
     }
