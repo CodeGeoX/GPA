@@ -3,55 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Days of Curs</title>
+    <title>Calendario del Curso</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-    .weekend-day {
-        background-color: #d9d9d9; 
-        font-weight: bold;
-    }
-    .trimester-day {
-        background-color: #ffcccb; 
-    }
-    .festiu-day {
-        background-color: #add8e6; 
-    }
-</style>
+        .weekend-day { background-color: #f8d7da; font-weight: bold; }
+        .trimester-day { background-color: #d1ecf1; }
+        .festiu-day { background-color: #fff3cd; }
+        th, td { text-align: center; }
+    </style>
 </head>
 <body>
-<a href="/" class="btn btn-secondary mt-3">Crear nuevo formulario</a>
     <div class="container mt-5">
-        <h2>Days of Curs</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Day</th>
-                    <th>Info</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach ($days as $day)
-    <tr class="{{ in_array($day['day'], ['Sat', 'Sun']) ? 'weekend-day' : '' }} {{ $day['trimesterInfo'] ? 'trimester-day' : '' }} {{ $day['isFestiu'] ? 'festiu-day' : '' }}">
-        <td>{{ $day['date'] }}</td>
-        <td>{{ $day['day'] }}</td>
-        <td>
-            @if ($day['trimesterInfo'])
-                <strong>{{ $day['trimesterInfo'] }}</strong>
-            @elseif ($day['isFestiu'])
-                <strong>Festiu</strong>
-            @endif
-        </td>
+        <h2>Calendario del Curso</h2>
+        <a href="/" class="btn btn-secondary mb-3">Volver al inicio</a>
+        <table class="table table-bordered">
+        <thead class="thead-dark">
+    <tr>
+        <th>Fecha</th>
+        <th>Día de la Semana</th>
+        <th>Información del Trimestre</th>
+        <th>Módulo</th>
+        <th>Ciclo</th>
+        <th>UF y Horas</th> <!-- Nueva columna para UF y Horas -->
+        <th>¿Es Festivo?</th>
     </tr>
-@endforeach
+        </thead>
+        <tbody>
+        @foreach ($days as $day)
+        <tr class="{{ $day['isFestiu'] ? 'festiu-day' : '' }}">
+            <td>{{ $day['date'] }}</td>
+            <td>{{ $day['dayOfWeek'] }}</td>
+            <td>{{ $day['trimesterInfo'] ?? 'Ninguno' }}</td>
+            <td>{{ $day['modulInfo'] ?? 'N/A' }}</td>
+            <td>{{ $day['cicleInfo'] ?? 'N/A' }}</td>
+            <td>{{ $day['ufInfo'] ?? 'N/A' }}</td> <!-- Datos de UF y Horas -->
+            <td>{{ $day['isFestiu'] ? 'Sí' : 'No' }}</td>
+        </tr>
+        @endforeach
+        </tbody>
 
-            </tbody>
-        </table>       
-        <a href="{{ route('cursos.export', $curs->id) }}" class="btn btn-primary">Exportar Calendario a JSON</a>
- 
+        </table>
     </div>
 
-    <!-- Bootstrap JS (Opcional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

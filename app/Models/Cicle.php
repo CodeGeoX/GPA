@@ -9,7 +9,7 @@ class Cicle extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom_cicle, id_curs'];
+    protected $fillable = ['nom_cicle', 'curs_id'];
 
     public function moduls()
     {
@@ -17,6 +17,6 @@ class Cicle extends Model
     }
     public function curs()
     {
-        return $this->belongsTo(Curs::class, 'id_curs');
+        return $this->belongsTo(Curs::class, 'curs_id');
     }
 }

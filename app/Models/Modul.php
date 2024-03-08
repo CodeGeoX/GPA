@@ -11,7 +11,7 @@ class Modul extends Model
 
     protected $fillable = ['nom_modul', 'id_cicle'];
 
-    public function uf()
+    public function ufs()
     {
         return $this->hasMany(Uf::class, 'id_modul');
     }

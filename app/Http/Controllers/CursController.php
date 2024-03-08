@@ -6,12 +6,15 @@ use App\Models\Curs;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use App\Models\Cicle;
 
 
 
 class CursController extends Controller
 {
-
+    
+    
+    
     public function index()
     {
     }
@@ -19,6 +22,9 @@ class CursController extends Controller
     public function create()
     {
     }
+
+
+
 
  
     public function store(Request $request)
@@ -61,7 +67,7 @@ public function storeFestiu(Request $request, $cursId)
         return redirect()->route('curs.createFestiu', $cursId);
     } else {
 
-        return redirect()->route('curs.showDays', $cursId)->with('success', 'Festivos creados satisfactoriamente y calendario actualizado.');
+        return redirect()->route('show', $cursId)->with('success', 'Festivos creados satisfactoriamente y calendario actualizado.');
     }
 }
 
@@ -113,42 +119,53 @@ public function storeFestiu(Request $request, $cursId)
     }
 
     public function showDays(Curs $curs)
-{
-    $startDate = Carbon::parse($curs->fecha_inicio_curs);
-    $endDate = Carbon::parse($curs->fecha_fin_curs);
-
-    $trimesters = $curs->trimestres()->get()->sortBy('fecha_inicio_trimestre');
-    $festius = $curs->festius()->get(); 
-
-    $days = [];
-    while ($startDate->lte($endDate)) {
-        $isFestiu = $festius->contains(function ($festiu) use ($startDate) {
-            return $startDate->between($festiu->fecha_inicio_festiu, $festiu->fecha_fin_festiu);
-        });
-
-        $trimesterInfo = null;
-        foreach ($trimesters as $index => $trimester) {
-            if ($startDate->isSameDay($trimester->fecha_inicio_trimestre)) {
-                $trimesterInfo = 'Inicio del Trimestre ' . ($index + 1);
-                break;
-            } elseif ($startDate->isSameDay($trimester->fecha_fin_trimestre)) {
-                $trimesterInfo = 'Fin del Trimestre ' . ($index + 1);
-                break;
+    {
+        $startDate = Carbon::parse($curs->fecha_inicio_curs);
+        $endDate = Carbon::parse($curs->fecha_fin_curs);
+        $trimesters = $curs->trimestres()->get()->sortBy('fecha_inicio_trimestre');
+        $festius = $curs->festius()->get(); 
+    
+        // Obtener todos los ciclos del curso
+        $cicles = Cicle::where('curs_id', $curs->id)->get();
+        $days = [];
+    
+        while ($startDate->lte($endDate)) {
+            $isFestiu = $festius->contains(function ($festiu) use ($startDate) {
+                return $startDate->between($festiu->fecha_inicio_festiu, $festiu->fecha_fin_festiu);
+            });
+    
+            $trimesterInfo = null;
+            foreach ($trimesters as $index => $trimester) {
+                if ($startDate->between($trimester->fecha_inicio_trimestre, $trimester->fecha_fin_trimestre)) {
+                    $trimesterInfo = 'Trimestre ' . ($index + 1);
+                    break;
+                }
             }
+    
+            // Asumimos que todos los módulos del ciclo se enseñan cada día (esto necesita ser ajustado según la lógica real)
+            $modulInfo = $cicles->flatMap(function ($cicle) {
+                return $cicle->moduls->map(function ($modul) {
+                    return $modul->nom_modul;
+                });
+            })->join(', ');
+    
+            $cicleInfo = $cicles->pluck('nom_cicle')->join(', ');
+    
+            $days[] = [
+                'date' => $startDate->format('Y-m-d'),
+                'dayOfWeek' => $startDate->isoFormat('dddd'),
+                'isFestiu' => $isFestiu,
+                'trimesterInfo' => $trimesterInfo,
+                'modulInfo' => $modulInfo,
+                'cicleInfo' => $cicleInfo,
+            ];
+    
+            $startDate->addDay();
         }
-
-        $days[] = [
-            'date' => $startDate->format('d.M.Y'),
-            'day' => $startDate->shortDayName,
-            'trimesterInfo' => $trimesterInfo,
-            'isFestiu' => $isFestiu, 
-        ];
-
-        $startDate->addDay();
+    
+        return view('show', compact('curs', 'days'));
     }
-
-    return view('show', compact('curs', 'days'));
-}
+    
 
     
 
@@ -201,22 +218,6 @@ private function getFestiusData(Curs $curs)
 
     
 
-    private function getCalendarData(Curs $curs)
-{
-    $calendarData = [];
-
-    $trimestres = $curs->trimestres;
-
-    foreach ($trimestres as $trimestre) {
-        $calendarData[] = [
-            'type' => 'trimestre',
-            'start_date' => $trimestre->fecha_inicio_trimestre,
-            'end_date' => $trimestre->fecha_fin_trimestre,
-        ];
-    }
-
-    return $calendarData;
-}
  
     public function show(Curs $curs)
     {

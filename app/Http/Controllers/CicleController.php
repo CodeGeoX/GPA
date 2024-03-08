@@ -34,18 +34,19 @@ class CicleController extends Controller
         // Validate the request data
         $request->validate([
             'nom_cicle' => 'required|string|max:255',
-            // Add more validation rules if needed
+            'curs_id' => 'required|exists:curs,id', // Ensure this validation rule is correct based on your database schema
         ]);
-
+    
         // Create a new cicle
         $cicle = Cicle::create([
             'nom_cicle' => $request->nom_cicle,
-            // Add more fields if needed
+            'curs_id' => $request->curs_id, // Include 'id_curs' in the creation
         ]);
-
+    
         // Redirect to the create_modul view with the cicle ID as a parameter
-        return redirect()->route('moduls.create', ['cursid' => $cicle->id])->with('success', 'Cicle created successfully!');
+        return redirect()->route('moduls.create', ['curs_id' => $cicle->id])->with('success', 'Cicle created successfully!');
     }
+
 
 
     /**

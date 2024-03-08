@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/curs', [CursController::class, 'store'])->name('curs.store');
 });
 
-Route::get('/curs/{curs}/show-days', [CursController::class, 'showDays'])->name('curs.showDays');
+Route::get('/curs/{curs}/show-days', [CursController::class, 'showDays'])->name('show');
 Route::get('/cursos/{curs}/export', [CursController::class, 'exportToJson'])->name('cursos.export');
 // Add routes for Festiu form and storage
 Route::get('/curs/{cursId}/festiu', [CursController::class, 'createFestiuForm'])->name('curs.createFestiu');
@@ -44,6 +44,7 @@ Route::post('/moduls', [ModulController::class, 'store'])->name('moduls.store');
 
 Route::get('/ufs/create/{cicle_id}/{modul_id}', [UfController::class, 'create'])->name('ufs.create');
 Route::post('/ufs/{id_modul}', [UfController::class, 'store'])->name('ufs.store');
+Route::get('/curs/{curs}/calendar', [CursController::class, 'showCalendar'])->name('curs.showCalendar');
 
 
 require __DIR__.'/auth.php';
