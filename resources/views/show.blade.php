@@ -17,31 +17,27 @@
         <h2>Calendario del Curso</h2>
         <a href="/" class="btn btn-secondary mb-3">Volver al inicio</a>
         <table class="table table-bordered">
-        <thead class="thead-dark">
-    <tr>
-        <th>Fecha</th>
-        <th>Día de la Semana</th>
-        <th>Información del Trimestre</th>
-        <th>Módulo</th>
-        <th>Ciclo</th>
-        <th>UF y Horas</th> <!-- Nueva columna para UF y Horas -->
-        <th>¿Es Festivo?</th>
-    </tr>
-        </thead>
-        <tbody>
-        @foreach ($days as $day)
-        <tr class="{{ $day['isFestiu'] ? 'festiu-day' : '' }}">
-            <td>{{ $day['date'] }}</td>
-            <td>{{ $day['dayOfWeek'] }}</td>
-            <td>{{ $day['trimesterInfo'] ?? 'Ninguno' }}</td>
-            <td>{{ $day['modulInfo'] ?? 'N/A' }}</td>
-            <td>{{ $day['cicleInfo'] ?? 'N/A' }}</td>
-            <td>{{ $day['ufInfo'] ?? 'N/A' }}</td> <!-- Datos de UF y Horas -->
-            <td>{{ $day['isFestiu'] ? 'Sí' : 'No' }}</td>
-        </tr>
-        @endforeach
-        </tbody>
+            <thead class="thead-dark">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Día de la Semana</th>
+                    <th>Información del Trimestre</th>
+                    <th>Horas Totales</th> <!-- Cambiado para mostrar solo las horas -->
+                    <th>¿Es Festivo?</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach ($days as $day)
+                <tr class="{{ $day['isFestiu'] ? 'festiu-day' : '' }}">
+                    <td>{{ $day['date'] }}</td>
+                    <td>{{ $day['dayOfWeek'] }}</td>
+                    <td>{{ $day['trimesterInfo'] ?? 'Ninguno' }}</td>
+                    <td>{{ $day['ufHoursInfo'] }}</td>
+                    <td>{{ $day['isFestiu'] ? 'Sí' : 'No' }}</td>
+                </tr>
+            @endforeach
 
+            </tbody>
         </table>
     </div>
 

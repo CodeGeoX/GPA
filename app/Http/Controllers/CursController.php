@@ -122,42 +122,58 @@ public function storeFestiu(Request $request, $cursId)
     {
         $startDate = Carbon::parse($curs->fecha_inicio_curs);
         $endDate = Carbon::parse($curs->fecha_fin_curs);
-        $trimesters = $curs->trimestres()->get()->sortBy('fecha_inicio_trimestre');
-        $festius = $curs->festius()->get(); 
+        $curs->load(['cicles.moduls.ufs', 'trimestres', 'festius']); // Asegúrate de cargar todas las relaciones necesarias
     
-        // Obtener todos los ciclos del curso
-        $cicles = Cicle::where('curs_id', $curs->id)->get();
         $days = [];
     
         while ($startDate->lte($endDate)) {
-            $isFestiu = $festius->contains(function ($festiu) use ($startDate) {
-                return $startDate->between($festiu->fecha_inicio_festiu, $festiu->fecha_fin_festiu);
-            });
+            $dayOfWeek = $startDate->englishDayOfWeek; // 'Monday', 'Tuesday', etc.
+            $fieldMapping = [
+                'Monday' => 'hores_dilluns',
+                'Tuesday' => 'hores_dimarts',
+                'Wednesday' => 'hores_dimecres',
+                'Thursday' => 'hores_dijous',
+                'Friday' => 'hores_divendres',
+            ];
     
-            $trimesterInfo = null;
-            foreach ($trimesters as $index => $trimester) {
-                if ($startDate->between($trimester->fecha_inicio_trimestre, $trimester->fecha_fin_trimestre)) {
-                    $trimesterInfo = 'Trimestre ' . ($index + 1);
-                    break;
+            $hoursField = $fieldMapping[$dayOfWeek] ?? null;
+            $ufHoursDetails = collect();
+    
+            if ($hoursField) {
+                foreach ($curs->cicles as $cicle) {
+                    foreach ($cicle->moduls as $modul) {
+                        foreach ($modul->ufs as $uf) {
+                            $hours = $uf->$hoursField;
+                            if ($hours > 0) {
+                                $ufDetail = "{$uf->nom_uf}: {$hours} horas";
+                                $ufHoursDetails->push($ufDetail);
+                            }
+                        }
+                    }
                 }
             }
     
-            // Asumimos que todos los módulos del ciclo se enseñan cada día (esto necesita ser ajustado según la lógica real)
-            $modulInfo = $cicles->flatMap(function ($cicle) {
-                return $cicle->moduls->map(function ($modul) {
-                    return $modul->nom_modul;
-                });
-            })->join(', ');
+            $isFestiu = $curs->festius->contains(function($festiu) use ($startDate) {
+                $festiuStart = Carbon::parse($festiu->fecha_inicio_festiu);
+                $festiuEnd = Carbon::parse($festiu->fecha_fin_festiu);
+                return $startDate->between($festiuStart, $festiuEnd, true); // Inclusivo: true
+            });
+            
+            
+            
     
-            $cicleInfo = $cicles->pluck('nom_cicle')->join(', ');
+            // Lógica para determinar la información del trimestre
+            $trimesterInfo = $curs->trimestres->filter(function ($trimestre) use ($startDate) {
+                return $startDate->between($trimestre->fecha_inicio_trimestre, $trimestre->fecha_fin_trimestre);
+            })->first();
+            $trimesterLabel = $trimesterInfo ? "Trimestre {$trimesterInfo->id}" : 'Ninguno';
     
             $days[] = [
                 'date' => $startDate->format('Y-m-d'),
-                'dayOfWeek' => $startDate->isoFormat('dddd'),
-                'isFestiu' => $isFestiu,
-                'trimesterInfo' => $trimesterInfo,
-                'modulInfo' => $modulInfo,
-                'cicleInfo' => $cicleInfo,
+                'dayOfWeek' => $startDate->format('l'),
+                'trimesterInfo' => $trimesterLabel,
+                'ufHoursInfo' => $ufHoursDetails->isEmpty() ? 'N/A' : $ufHoursDetails->join('; '),
+                'isFestiu' => $isFestiu ? 'Sí' : 'No', // Asegura que isFestiu siempre esté definido
             ];
     
             $startDate->addDay();
@@ -166,7 +182,7 @@ public function storeFestiu(Request $request, $cursId)
         return view('show', compact('curs', 'days'));
     }
     
-
+    
     
 
 public function exportToJson(Curs $curs)

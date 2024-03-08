@@ -24,4 +24,9 @@ class Curs extends Model
     {
         return $this->hasMany(Festiu::class);
     }
+
+    public function cicles()
+{
+    return $this->hasMany(Cicle::class);
+}
 }

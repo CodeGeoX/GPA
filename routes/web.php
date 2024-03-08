@@ -39,7 +39,7 @@ Route::post('/curs/{cursId}/festiu', [CursController::class, 'storeFestiu'])->na
 Route::get('/cicles/create', [CicleController::class, 'create'])->name('cicles.create');
 Route::post('/cicles', [CicleController::class, 'store'])->name('cicles.store');
 Route::get('/cicles', [CicleController::class, 'index'])->name('cicles.index');
-Route::get('/moduls/create/{cursid}', [ModulController::class, 'create'])->name('moduls.create');
+Route::get('/moduls/create/{cursId}', [ModulController::class, 'create'])->name('moduls.create');
 Route::post('/moduls', [ModulController::class, 'store'])->name('moduls.store');
 
 Route::get('/ufs/create/{cicle_id}/{modul_id}', [UfController::class, 'create'])->name('ufs.create');
