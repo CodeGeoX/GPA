@@ -43,7 +43,7 @@ Route::get('/moduls/create/{cursid}', [ModulController::class, 'create'])->name(
 Route::post('/moduls', [ModulController::class, 'store'])->name('moduls.store');
 
 Route::get('/ufs/create/{cicle_id}/{modul_id}', [UfController::class, 'create'])->name('ufs.create');
-Route::post('/ufs', [UfController::class, 'store'])->name('ufs.store');
+Route::post('/ufs/{id_modul}', [UfController::class, 'store'])->name('ufs.store');
 
 
 require __DIR__.'/auth.php';

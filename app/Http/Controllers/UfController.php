@@ -52,8 +52,19 @@ class UfController extends Controller
             // Add more fields if needed
         ]);
 
-        // Redirect to the UF index page or another appropriate route
-        return redirect()->route('ufs.index')->with('success', 'UF created successfully!');
+        switch ($request->input('action')) {
+            case 'finish':
+                // Redirigir al dashboard
+                return redirect()->route('dashboard')->with('success', 'UF creado exitosamente!');
+            
+            case 'new_modul':
+                // Redirigir a crear un nuevo módulo
+                return redirect()->route('moduls.create', ['cursid' => $request->cicle_id]);
+            
+            case 'new_uf':
+                // Redirigir a crear una nueva UF en el mismo módulo
+                return redirect()->route('ufs.create', ['cicle_id' => $request->cicle_id, 'modul_id' => $id_modul]);
+        }
     }
 
     /**

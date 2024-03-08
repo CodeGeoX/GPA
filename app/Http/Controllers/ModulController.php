@@ -28,24 +28,19 @@ class ModulController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    // Validate the request data
-    $request->validate([
-        'nom_modul' => 'required|string|max:255',
-        'id_cicle' => 'required|exists:cicles,id', // Validate that the cicle ID exists in the cicles table
-        // Add more validation rules if needed
-    ]);
+    {
+        $request->validate([
+            'nom_modul' => 'required|string|max:255',
+            'id_cicle' => 'required|exists:cicles,id',
+        ]);
 
-    // Create a new modul
-    $modul = Modul::create([
-        'nom_modul' => $request->nom_modul,
-        'id_cicle' => $request->id_cicle,
-        // Add more fields if needed
-    ]);
+        $modul = Modul::create([
+            'nom_modul' => $request->nom_modul,
+            'id_cicle' => $request->id_cicle,
+        ]);
 
-    // Redirect to a new URL after creating the modul
-    return redirect()->route('ufs.create', ['cicle_id' => $request->id_cicle, 'modul_id' => $modul->id])->with('success', 'Modul created successfully!');
-}
+        return redirect()->route('ufs.create', ['cicle_id' => $request->id_cicle, 'modul_id' => $modul->id]);
+    }
 
     /**
      * Display the specified resource.

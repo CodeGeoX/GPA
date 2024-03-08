@@ -14,8 +14,7 @@
 <div class="container">
         <h1>Create New UF</h1>
 
-        <form action="{{ route('ufs.store', ['id_modul' => $modulId] + $request->all()) }}" method="post">
-
+        <form action="{{ route('ufs.store', ['id_modul' => $modulId]) }}" method="post">
             @csrf <!-- CSRF protection -->
 
             <div class="form-group">
@@ -44,13 +43,17 @@
             </div>
 
             <div class="form-group">
+                
                 <label for="hores_divendres">Hores Divendres:</label>
                 <input type="number" name="hores_divendres" id="hores_divendres" class="form-control" required>
             </div>
 
             <input type="hidden" name="id_modul" value="{{ $modulId }}">
+            <input type="hidden" name="cicle_id" value="{{ $cicleId }}">
 
-            <button type="submit" class="btn btn-primary">Create UF</button>
+            <button type="submit" name="action" value="finish" class="btn btn-primary">Aceptar y Terminar</button>
+            <button type="submit" name="action" value="new_modul" class="btn btn-secondary">Aceptar y Crear Nuevo Módulo</button>
+            <button type="submit" name="action" value="new_uf" class="btn btn-success">Aceptar y Crear Nueva UF</button>
     </form>
 </div>
 
