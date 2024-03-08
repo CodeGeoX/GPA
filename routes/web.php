@@ -6,6 +6,9 @@ use App\Http\Controllers\CursController;
 use App\Http\Controllers\FestiuController;
 use App\Http\Controllers\TrimestreController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\CicleController;
+use App\Http\Controllers\ModulController;
+use App\Http\Controllers\UfController;
 
 
 Route::get('/', function () {
@@ -33,7 +36,14 @@ Route::get('/cursos/{curs}/export', [CursController::class, 'exportToJson'])->na
 Route::get('/curs/{cursId}/festiu', [CursController::class, 'createFestiuForm'])->name('curs.createFestiu');
 Route::post('/curs/{cursId}/festiu', [CursController::class, 'storeFestiu'])->name('curs.storeFestiu');
 
+Route::get('/cicles/create', [CicleController::class, 'create'])->name('cicles.create');
+Route::post('/cicles', [CicleController::class, 'store'])->name('cicles.store');
+Route::get('/cicles', [CicleController::class, 'index'])->name('cicles.index');
+Route::get('/moduls/create/{cursid}', [ModulController::class, 'create'])->name('moduls.create');
+Route::post('/moduls', [ModulController::class, 'store'])->name('moduls.store');
 
+Route::get('/ufs/create/{cicle_id}/{modul_id}', [UfController::class, 'create'])->name('ufs.create');
+Route::post('/ufs', [UfController::class, 'store'])->name('ufs.store');
 
 
 require __DIR__.'/auth.php';

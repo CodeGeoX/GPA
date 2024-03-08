@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Cicle extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['nom_cicle'];
+
+    public function moduls()
+    {
+        return $this->hasMany(Modul::class, 'id_cicle');
+    }
 }

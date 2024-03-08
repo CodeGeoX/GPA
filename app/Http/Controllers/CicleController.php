@@ -12,7 +12,7 @@ class CicleController extends Controller
      */
     public function index()
     {
-        //
+        // You can add logic to display a list of cicles if needed
     }
 
     /**
@@ -20,23 +20,39 @@ class CicleController extends Controller
      */
     public function create()
     {
-        //
+        return view('cicle');
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    // CicleController.php
+
     public function store(Request $request)
     {
-        //
+        // Validate the request data
+        $request->validate([
+            'nom_cicle' => 'required|string|max:255',
+            // Add more validation rules if needed
+        ]);
+
+        // Create a new cicle
+        $cicle = Cicle::create([
+            'nom_cicle' => $request->nom_cicle,
+            // Add more fields if needed
+        ]);
+
+        // Redirect to the create_modul view with the cicle ID as a parameter
+        return redirect()->route('moduls.create', ['cursid' => $cicle->id])->with('success', 'Cicle created successfully!');
     }
+
 
     /**
      * Display the specified resource.
      */
     public function show(Cicle $cicle)
     {
-        //
+        // You can add logic to display a specific cicle if needed
     }
 
     /**
@@ -44,7 +60,7 @@ class CicleController extends Controller
      */
     public function edit(Cicle $cicle)
     {
-        //
+        // You can add logic to show the edit form if needed
     }
 
     /**
@@ -52,7 +68,7 @@ class CicleController extends Controller
      */
     public function update(Request $request, Cicle $cicle)
     {
-        //
+        // You can add logic to update the cicle if needed
     }
 
     /**
@@ -60,6 +76,7 @@ class CicleController extends Controller
      */
     public function destroy(Cicle $cicle)
     {
-        //
+        // You can add logic to delete the cicle if needed
     }
 }
+
