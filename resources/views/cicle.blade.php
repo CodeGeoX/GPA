@@ -15,13 +15,19 @@
 
         <form action="{{ route('cicles.store') }}" method="post">
             @csrf <!-- CSRF protection -->
-            
+            <div class="form-group">
+                <label for="id_curs">Seleccione un Curso:</label>
+                <select name="id_curs" id="id_curs" class="form-control">
+                    @foreach($cursos as $curso)
+                        <option value="{{ $curso->id }}">{{ $curso->nombre_curs }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="form-group">
                 <label for="nom_cicle">Nom Cicle:</label>
                 <input type="text" name="nom_cicle" id="nom_cicle" class="form-control" required>
             </div>
-
-
+        
             <button type="submit" class="btn btn-primary">Create Cicle</button>
         </form>
 </div>

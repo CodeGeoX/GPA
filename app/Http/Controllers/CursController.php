@@ -27,6 +27,7 @@ class CursController extends Controller
         $this->validateCursData($request);
 
         $curs = Curs::create([
+            'nombre_curs' => $request->input('nombre_curs'),
             'fecha_inicio_curs' => $request->input('fecha_inicio_curs'),
             'fecha_fin_curs' => $request->input('fecha_fin_curs'),
         ]);

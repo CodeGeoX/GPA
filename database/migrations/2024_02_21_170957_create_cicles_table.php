@@ -11,6 +11,7 @@ class CreateCiclesTable extends Migration
         Schema::create('cicles', function (Blueprint $table) {
             $table->id();
             $table->string('nom_cicle');
+            $table->foreignId('curs_id')->constrained(); 
             $table->timestamps();
         });
     }

@@ -13,6 +13,10 @@
     <form action="{{ route('curs.store') }}" method="post">
         @csrf
         <div class="form-group">
+            <label for="fecha_inicio_curs">Nombre del curso:</label>
+            <input type="text" name="nombre_curs" class="form-control" required>
+        </div>
+        <div class="form-group">
             <label for="fecha_inicio_curs">Start Date of the Course:</label>
             <input type="date" name="fecha_inicio_curs" class="form-control" required>
         </div>

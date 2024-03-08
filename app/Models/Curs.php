@@ -10,6 +10,7 @@ class Curs extends Model
     use HasFactory;
 
     protected $fillable = [
+        'nombre_curs',
         'fecha_inicio_curs',
         'fecha_fin_curs',
     ];

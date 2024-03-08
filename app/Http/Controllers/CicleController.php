@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cicle;
 use Illuminate\Http\Request;
-
+use App\Models\Curs; 
 class CicleController extends Controller
 {
     /**
@@ -20,7 +20,8 @@ class CicleController extends Controller
      */
     public function create()
     {
-        return view('cicle');
+        $cursos = Curs::all(); 
+        return view('cicle', compact('cursos'));
     }
 
     /**
